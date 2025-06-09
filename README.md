@@ -154,6 +154,44 @@ tail -f /home/ubuntu/app.log
 Let me know if you want to:
 
 Run this on a remote group of servers
+gradle plugin
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.testng:testng:7.7.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.8.0'
+}
+
+application {
+    mainClass = 'com.example.Main'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.example.Main'
+    }
+}
+
+// Optional: Copy website to docs/
+task copyWebsite(type: Copy) {
+    from 'src/main/resources'
+    into 'docs'
+}
+
+tasks.named('run') {
+    dependsOn 'copyWebsite'
+}
+
+test {
+    useTestNG()
+}
+
 
 Deploy as a systemd service instead of using nohup
 
