@@ -1,0 +1,18 @@
+---
+- name: Deploy built JAR file
+  hosts: localhost
+  become: yes
+  tasks:
+
+    - name: Stop existing Java process (if any)
+      shell: pkill -f 'java -jar'
+      ignore_errors: yes
+
+    - name: Wait for 2 seconds after killing process
+      pause:
+        seconds: 2
+
+    - name: Start the new JAR file in background
+      shell: nohup java -jar /home/ubuntu/deployment/ansible1-1.0-SNAPSHOT.jar > /home/ubuntu/app.log 2>&1 &
+      args:
+        executable: /bin/bash
